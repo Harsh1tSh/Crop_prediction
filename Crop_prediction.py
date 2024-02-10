@@ -11,43 +11,43 @@ import joblib
 data = pd.read_csv('Data_for_analysis.csv')
 
 # Data cleaning and preprocessing
-# Replace NaN values with random values
+# Replacing NaN values with random values
 data.fillna(value=np.random.random(), inplace=True)
 
-# Convert the target variable into categorical bins
-bins = [0, 1, 2, 3, 4]  # Adjust the bin edges based on your data
-labels = [1, 2, 3, 4]  # Adjust the labels based on your data
+# Converting the target variable into categorical bins
+bins = [0, 1, 2, 3, 4]  
+labels = [1, 2, 3, 4]  
 data['climate.category'] = pd.cut(data['climate.category'], bins=bins, labels=labels)
 
 # Feature selection
 features = ['temp.average', 'precip.average', 'temp.min', 'precip.min', 'temp.max', 'precip.max', 'temp.growing.season', 'precip.growing.season']
 target = 'climate.category'
 
-# Split the data into features and target variable
+# Spliting the data into features and target variable
 X = data[features]
 y = data[target]
 
-# Split the data into training and testing sets
+# Spliting the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Create a RandomForestClassifier model
+# Creating a RandomForestClassifier model
 model = RandomForestClassifier()
 
-# Train the model
+# Training the model
 model.fit(X_train, y_train)
 
-# Make predictions on the test set
+# Making predictions on the test set
 predictions = model.predict(X_test)
 
-# Evaluate the accuracy of the model
+# Evaluating the accuracy of the model
 accuracy = accuracy_score(y_test, predictions)
 classification_rep = classification_report(y_test, predictions)
 
-# Print the model accuracy and classification report
+# Printing the model accuracy and classification report
 print(f"Model Accuracy: {accuracy}")
 print("Classification Report:\n", classification_rep)
 
-# Plot feature importance
+# Ploting feature importance
 feature_importance = model.feature_importances_
 sns.barplot(x=feature_importance, y=features)
 plt.title('Feature Importance')
@@ -73,8 +73,8 @@ plt.title('Kernel Density Estimation of Average Temperature for Each Climate Cat
 plt.legend()
 plt.show()
 
-# Visualize the data for the specific crop
-crop_data = data.sample(1)  # Replace this with the actual data for a specific crop
+# Visualizing the data for the specific crop
+crop_data = data.sample(1)  # Here in the sample we can choose which crop we want to visualize
 crop_prediction = model.predict(crop_data[features])
 print(f"Suitability Prediction for the Crop: {crop_prediction[0]}")
 
@@ -90,10 +90,9 @@ plt.title('Climate Categories based on Temperature and Precipitation for Differe
 plt.legend()
 plt.show()
 
-# Save the trained model for future use
+# Saving the trained model for future use
 joblib.dump(model, 'crop_suitability_model.joblib')
 
-# Additional visualizations and analysis based on your requirements
 # Histogram of Average Temperature for each Climate Category
 plt.figure(figsize=(10, 6))
 for category in data['climate.category'].unique():
