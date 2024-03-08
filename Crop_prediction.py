@@ -7,47 +7,46 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
 
-# Load the data
+
 data = pd.read_csv('Data_for_analysis.csv')
 
-# Data cleaning and preprocessing
-# Replacing NaN values with random values
+
 data.fillna(value=np.random.random(), inplace=True)
 
-# Converting the target variable into categorical bins
+
 bins = [0, 1, 2, 3, 4]  
 labels = [1, 2, 3, 4]  
 data['climate.category'] = pd.cut(data['climate.category'], bins=bins, labels=labels)
 
-# Feature selection
+
 features = ['temp.average', 'precip.average', 'temp.min', 'precip.min', 'temp.max', 'precip.max', 'temp.growing.season', 'precip.growing.season']
 target = 'climate.category'
 
-# Spliting the data into features and target variable
+
 X = data[features]
 y = data[target]
 
-# Spliting the data into training and testing sets
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Creating a RandomForestClassifier model
+
 model = RandomForestClassifier()
 
-# Training the model
+
 model.fit(X_train, y_train)
 
-# Making predictions on the test set
+
 predictions = model.predict(X_test)
 
-# Evaluating the accuracy of the model
+
 accuracy = accuracy_score(y_test, predictions)
 classification_rep = classification_report(y_test, predictions)
 
-# Printing the model accuracy and classification report
+
 print(f"Model Accuracy: {accuracy}")
 print("Classification Report:\n", classification_rep)
 
-# Ploting feature importance
+
 feature_importance = model.feature_importances_
 sns.barplot(x=feature_importance, y=features)
 plt.title('Feature Importance')
@@ -90,7 +89,7 @@ plt.title('Climate Categories based on Temperature and Precipitation for Differe
 plt.legend()
 plt.show()
 
-# Saving the trained model for future use
+
 joblib.dump(model, 'crop_suitability_model.joblib')
 
 # Histogram of Average Temperature for each Climate Category
